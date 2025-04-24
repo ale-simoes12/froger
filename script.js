@@ -42,12 +42,12 @@ function desenhaComeco() {
 
 
 
-function geraTronco() {
-    let tronco = { x: -100, y: 60, width: 100, height: 30, velocidade: 1.5, direcao: 'direita' };
-    let tronco2 = { x: canvas.width + 100, y: 100, width: 70, height: 30, velocidade: -1.5, direcao: 'esquerda' };
-    let tronco3 = { x: -160, y: 140, width: 160, height: 30, velocidade: 1, direcao: 'direita' };
-    let tronco4 = { x: canvas.width + 100, y: 180, width: 130, height: 30, velocidade: -1.5, direcao: 'esquerda' };
-    let tronco5 = { x: -150, y: 220, width: 150, height: 30, velocidade: 1.5, direcao: 'esquerda' };
+function geraTronco(x) {
+    let tronco = { x: -100+x, y: 60, width: 100, height: 30, velocidade: 1.5, direcao: 'direita' };
+    let tronco2 = { x: canvas.width + 100-x, y: 100, width: 70, height: 30, velocidade: -1.5, direcao: 'esquerda' };
+    let tronco3 = { x: -140+x, y: 140, width: 140, height: 30, velocidade: 1, direcao: 'direita' };
+    let tronco4 = { x: canvas.width + 100-x, y: 180, width: 130, height: 30, velocidade: -1.5, direcao: 'esquerda' };
+    let tronco5 = { x: -150+x, y: 220, width: 150, height: 30, velocidade: 1.5, direcao: 'esquerda' };
     ArrayTroncoFaixa1.push(tronco);
     ArrayTroncoFaixa2.push(tronco2);
     ArrayTroncoFaixa3.push(tronco3);
@@ -81,14 +81,14 @@ function desenharTronco() {
 
 
 function criaBuracos(){
-    const casas = 3;
+    const casas = 5;
     const larguraCasa = 50;
     const alturaCasa = 50;
     const yBuraco = 0;
     const espacamento = (canvas.width - casas * larguraCasa) / (casas + 1);
     for (let i = 0; i < casas; i++) {
 
-    console.log(i);
+    //console.log(i);
     const x = espacamento + i * (larguraCasa + espacamento);
     let buraco = {x: x,y: yBuraco + 8,width: larguraCasa,height: alturaCasa - 8,ocupado: false}
     buracos.push(buraco);
@@ -110,8 +110,11 @@ function verificaEntrouBuraco(){
     for (let i = 0; i < buracos.length; i++) {
         const buraco = buracos[i];
 
-        const colisaoHorizontal = frog.x + frog.width > buraco.x && frog.x < buraco.x + buraco.width;
-        const colisaoVertical = frog.y + frog.height > buraco.y && frog.y < buraco.y + buraco.height;
+        // const colisaoHorizontal = frog.x + frog.width > buraco.x && frog.x < buraco.x + buraco.width;
+        // const colisaoVertical = frog.y + frog.height > buraco.y && frog.y < buraco.y + buraco.height;
+
+        const colisaoHorizontal = frog.x >= buraco.x && (frog.x + frog.width) <= (buraco.x + buraco.width);
+        const colisaoVertical = frog.y >= buraco.y && (frog.y + frog.height) <= (buraco.y + buraco.height);
 
         if (colisaoHorizontal && colisaoVertical && !buraco.ocupado) {
             buraco.ocupado = true;
@@ -137,7 +140,7 @@ function desenharBuracosDeChegada() {
     //     ctx.fillRect(x, y + 8, larguraCasa, alturaCasa - 8);
     //     ctx.drawImage(imgSapoVitoria, x, y + 8, larguraCasa, alturaCasa-8);
     // }
-    console.log(buracos);
+    //console.log(buracos);
     for (let i = 0; i < buracos.length ; i++) {
         ctx.fillStyle = "black";
         ctx.fillRect(buracos[i].x, buracos[i].y, buracos[i].width,buracos[i].height);
@@ -153,12 +156,16 @@ function desenharBuracosDeChegada() {
 
 function vericaSapoNoTronco(ArrayTronco) {
     for (let tronco of ArrayTronco) {
-        const colisaoHorizontal = frog.x + frog.width > tronco.x && frog.x < tronco.x + tronco.width;
-        const colisaoVertical = frog.y + frog.height > tronco.y && frog.y < tronco.y + tronco.height;
+        // const colisaoHorizontal = frog.x + frog.width > tronco.x && frog.x < tronco.x + tronco.width;
+        // const colisaoVertical = frog.y + frog.height > tronco.y && frog.y < tronco.y + tronco.height;
+
+        const colisaoHorizontal = frog.x >= tronco.x && (frog.x + frog.width) <= (tronco.x + tronco.width);
+        const colisaoVertical = frog.y >= tronco.y && (frog.y + frog.height) <= (tronco.y + tronco.height);
     
 
         if (colisaoHorizontal && colisaoVertical) {
             estaNotronco = true;
+            console.log(estaNotronco);
             return tronco;
         }
     }
@@ -167,12 +174,12 @@ function vericaSapoNoTronco(ArrayTronco) {
 }
 
 
-function criaCarros() {
-    let carro = { x: -100, y: 520+aumentarY, width: 70, height: 30, velocidade: 1.5, direcao: 'direita' };
-    let carro2 = { x: canvas.width + 100, y: 480+aumentarY, width: 70, height: 30, velocidade: -1.5, direcao: 'esquerda' };
-    let carro3 = { x: -100, y: 440+aumentarY, width: 70, height: 30, velocidade: 1, direcao: 'direita' };
-    let carro4 = { x: canvas.width + 100, y: 400+aumentarY, width: 70, height: 30, velocidade: -1.5, direcao: 'esquerda' };
-    let carro5 = { x: -100, y: 360+aumentarY, width: 70, height: 30, velocidade: 1.5, direcao: 'esquerda' };
+function criaCarros(x) {
+    let carro = { x: -100+x, y: 520+aumentarY, width: 70, height: 30, velocidade: 1.5, direcao: 'direita' };
+    let carro2 = { x: canvas.width + 100 - x, y: 480+aumentarY, width: 70, height: 30, velocidade: -1.5, direcao: 'esquerda' };
+    let carro3 = { x: -100+x, y: 440+aumentarY, width: 70, height: 30, velocidade: 1, direcao: 'direita' };
+    let carro4 = { x: canvas.width + 100-x, y: 400+aumentarY, width: 70, height: 30, velocidade: -1.5, direcao: 'esquerda' };
+    let carro5 = { x: -100+x, y: 360+aumentarY, width: 70, height: 30, velocidade: 1.5, direcao: 'esquerda' };
     ArrayCarrosFaixa1.push(carro);
     ArrayCarrosFaixa2.push(carro2);
     ArrayCarrosFaixa3.push(carro3);
@@ -181,10 +188,14 @@ function criaCarros() {
 }
 
 function gerarIntervalo() {
-    criaCarros();
-    geraTronco();
-    intervalCarros = setInterval(criaCarros, 3000);
-    intervalTroncos = setInterval(geraTronco, 3000);
+    // criaCarros(200);
+    // criaCarros(400);
+    // criaCarros(0);
+    // geraTronco(0);
+    // geraTronco(200)
+    // geraTronco(400);
+    intervalCarros = setInterval(() => criaCarros(0), 3000);
+    intervalTroncos = setInterval(() => geraTronco(0), 3000);
 
 }
 
